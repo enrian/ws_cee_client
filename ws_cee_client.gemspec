@@ -3,10 +3,6 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 require 'ws_cee_client/version'
-require 'ws_cee_client/cause_detail'
-require 'ws_cee_client/cause_info'
-require 'ws_cee_client/document'
-require 'ws_cee_client/subject'
 
 Gem::Specification.new do |spec|
   spec.name          = 'ws_cee_client'

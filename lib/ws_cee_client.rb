@@ -1,6 +1,11 @@
 require 'rubyntlm'
 require 'savon'
 
+require 'ws_cee_client/cause_detail'
+require 'ws_cee_client/cause_info'
+require 'ws_cee_client/document'
+require 'ws_cee_client/subject'
+
 module WsCee
   class Client
     WS_CEE_TESTING_URL = 'https://source.bisnode.cz/services/cee_fix/v001/soap?wsdl'
