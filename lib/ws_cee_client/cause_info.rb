@@ -10,6 +10,8 @@ module WsCee
       @document_type = cause_hash[:document_type]
       @registration_date = cause_hash[:registration_date]
       @subject = Subject.new cause_hash[:subject_info]
+    rescue NoMethodError
+      raise WsCee::ParsingError
     end
   end
 end

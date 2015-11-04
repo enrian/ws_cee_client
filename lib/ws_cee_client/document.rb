@@ -24,6 +24,8 @@ module WsCee
 
       @subjects = []
       parse_subject document_hash[:subject]
+    rescue NoMethodError
+      raise WsCee::ParsingError
     end
 
     private

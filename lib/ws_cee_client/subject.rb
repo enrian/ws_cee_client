@@ -10,6 +10,8 @@ module WsCee
       @address = subject_info_hash[:address]
       @registration_id = subject_info_hash[:registration_id]
       @date_of_birth = subject_info_hash[:date_of_birth]
+    rescue NoMethodError
+      raise WsCee::ParsingError
     end
   end
 end

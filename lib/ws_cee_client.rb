@@ -1,6 +1,7 @@
 require 'rubyntlm'
 require 'savon'
 
+require 'ws_cee_client/errors'
 require 'ws_cee_client/cause_detail'
 require 'ws_cee_client/cause_info'
 require 'ws_cee_client/document'
@@ -9,12 +10,14 @@ require 'ws_cee_client/subject'
 module WsCee
   class Client
     WS_CEE_TESTING_URL = 'https://source.bisnode.cz/services/cee_fix/v001/soap?wsdl'
-    WS_CEE_PRODUCTION_URL = 'https://source.bisnode.cz/services/cee_fix/v001/soap?wsdl'
+    WS_CEE_PRODUCTION_URL = 'https://source.bisnode.cz/services/cee_fix/v001/soap?wsdl' # FIXME
 
     def initialize(options)
       @savon = Savon.client wsdl: options[:testing] ? WS_CEE_PRODUCTION_URL : WS_CEE_TESTING_URL
       @username = options[:username]
       @password = options[:password]
+    rescue Savon::Error
+      raise WsCee::ConnectionError
     end
 
     def find_by_company(company_details)
@@ -34,11 +37,15 @@ module WsCee
     def company_indication(company_details)
       response = @savon.call :indication, message: company_query(company_details)
       parse_indication_response response.hash
+    rescue Savon::Error
+      raise WsCee::ConnectionError
     end
 
     def person_indication(person_details)
       response = @savon.call :indication, message: person_query(person_details)
       parse_indication_response response.hash
+    rescue Savon::Error
+      raise WsCee::ConnectionError
     end
 
     def parse_indication_response(hash)

@@ -10,6 +10,8 @@ module WsCee
 
       @documents = []
       parse_document cause_detail_hash[:document]
+    rescue NoMethodError
+      raise WsCee::ParsingError
     end
 
     private
