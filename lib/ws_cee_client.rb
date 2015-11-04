@@ -1,4 +1,4 @@
-require 'rubyntlm'
+require 'rubygems'
 require 'savon'
 
 require 'ws_cee_client/errors'
@@ -16,7 +16,7 @@ module WsCee
       @savon = Savon.client wsdl: options[:testing] ? WS_CEE_PRODUCTION_URL : WS_CEE_TESTING_URL
       @username = options[:username]
       @password = options[:password]
-    rescue Savon::Error
+    rescue *SAVON_ERRORS
       raise WsCee::ConnectionError
     end
 
@@ -37,20 +37,20 @@ module WsCee
     def company_indication(company_details)
       response = @savon.call :indication, message: company_query(company_details)
       parse_indication_response response.hash
-    rescue Savon::Error
+    rescue *SAVON_ERRORS
       raise WsCee::ConnectionError
     end
 
     def person_indication(person_details)
       response = @savon.call :indication, message: person_query(person_details)
       parse_indication_response response.hash
-    rescue Savon::Error
+    rescue *SAVON_ERRORS
       raise WsCee::ConnectionError
     end
 
     def parse_indication_response(hash)
       result = hash[:envelope][:body][:indication_result]
-      return nil if result.nil?
+      return [] if result.nil?
 
       cause_info = result[:cause_info]
       if cause_info.is_a? Array
@@ -67,7 +67,7 @@ module WsCee
 
     def parse_detail_response(hash)
       result = hash[:envelope][:body][:detail_result]
-      return nil if result.nil?
+      return [] if result.nil?
 
       CauseDetail.new result[:cause]
     end
