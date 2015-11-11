@@ -21,9 +21,9 @@ module WsCee
       @password = options[:password]
       @proxy = options[:proxy]
 
-      @savon = Savon.client do |parameters|
-        parameters.wsdl = options[:testing] ? WS_CEE_PRODUCTION_URL : WS_CEE_TESTING_URL
-        parameters.proxy =  @proxy if !@proxy.nil? && !@proxy.empty?
+      @savon = Savon.client do
+        wsdl options[:testing] ? WS_CEE_PRODUCTION_URL : WS_CEE_TESTING_URL
+        proxy @proxy if !@proxy.nil? && !@proxy.empty?
       end
     rescue *SAVON_ERRORS
       raise WsCee::ConnectionError
