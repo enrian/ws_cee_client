@@ -12,10 +12,19 @@ module WsCee
     WS_CEE_TESTING_URL = 'https://source.bisnode.cz/services/cee_fix/v001/soap?wsdl'
     WS_CEE_PRODUCTION_URL = 'https://source.bisnode.cz/services/cee_fix/v001/soap?wsdl' # FIXME
 
+    attr_reader :username
+    attr_reader :password
+    attr_reader :proxy
+
     def initialize(options)
-      @savon = Savon.client wsdl: options[:testing] ? WS_CEE_PRODUCTION_URL : WS_CEE_TESTING_URL
       @username = options[:username]
       @password = options[:password]
+      @proxy = options[:proxy]
+
+      @savon = Savon.client do |parameters|
+        parameters.wsdl = options[:testing] ? WS_CEE_PRODUCTION_URL : WS_CEE_TESTING_URL
+        parameters.proxy =  @proxy if !@proxy.nil? && !@proxy.empty?
+      end
     rescue *SAVON_ERRORS
       raise WsCee::ConnectionError
     end
