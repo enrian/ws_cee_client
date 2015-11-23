@@ -10,11 +10,12 @@ require 'ws_cee_client/subject'
 module WsCee
   class Client
     WS_CEE_TESTING_URL = 'https://source.bisnode.cz/services/cee_fix/v001/soap?wsdl'
-    WS_CEE_PRODUCTION_URL = 'https://source.bisnode.cz/services/cee_fix/v001/soap?wsdl' # FIXME
+    WS_CEE_PRODUCTION_URL = 'http://data.soliditet.cz/services/cee/v001/soap?wsdl'
 
     attr_reader :username
     attr_reader :password
     attr_reader :proxy
+    attr_reader :savon
 
     def initialize(options)
       @username = options[:username]
@@ -25,8 +26,8 @@ module WsCee
         wsdl options[:testing] ? WS_CEE_PRODUCTION_URL : WS_CEE_TESTING_URL
         proxy @proxy if !@proxy.nil? && !@proxy.empty?
       end
-    rescue *SAVON_ERRORS
-      raise WsCee::ConnectionError
+    rescue *SAVON_ERRORS => e
+      raise WsCee::ConnectionError, e.message
     end
 
     def find_by_company(company_details)
@@ -46,15 +47,15 @@ module WsCee
     def company_indication(company_details)
       response = @savon.call :indication, message: company_query(company_details)
       parse_indication_response response.hash
-    rescue *SAVON_ERRORS
-      raise WsCee::ConnectionError
+    rescue *SAVON_ERRORS => e
+      raise WsCee::ConnectionError, e.message
     end
 
     def person_indication(person_details)
       response = @savon.call :indication, message: person_query(person_details)
       parse_indication_response response.hash
-    rescue *SAVON_ERRORS
-      raise WsCee::ConnectionError
+    rescue *SAVON_ERRORS => e
+      raise WsCee::ConnectionError, e.message
     end
 
     def parse_indication_response(hash)
