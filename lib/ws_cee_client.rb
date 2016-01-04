@@ -10,7 +10,7 @@ require 'ws_cee_client/subject'
 module WsCee
   class Client
     WS_CEE_TESTING_URL = 'https://source.bisnode.cz/services/cee_fix/v001/soap?wsdl'
-    WS_CEE_PRODUCTION_URL = 'http://data.soliditet.cz/services/cee/v001/soap?wsdl'
+    WS_CEE_PRODUCTION_URL = 'https://source.bisnode.cz/services/cee/v001/soap?wsdl'
 
     attr_reader :username
     attr_reader :password
