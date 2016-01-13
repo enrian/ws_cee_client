@@ -20,7 +20,7 @@ module WsCee
     def initialize(options={})
       @username = options[:username]
       @password = options[:password]
-      @proxy = options[:proxy]
+      @proxy = options[:proxy].to_s
 
       savon_options = { wsdl: (options[:testing] ? WS_CEE_TESTING_URL : WS_CEE_PRODUCTION_URL) }
       savon_options.merge!({ proxy: @proxy }) if !@proxy.nil? && !@proxy.empty?
