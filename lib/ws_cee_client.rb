@@ -22,10 +22,10 @@ module WsCee
       @password = options[:password]
       @proxy = options[:proxy]
 
-      @savon = Savon.client do
-        wsdl options[:testing] ? WS_CEE_TESTING_URL : WS_CEE_PRODUCTION_URL
-        proxy @proxy if !@proxy.nil? && !@proxy.empty?
-      end
+      savon_options = { wsdl: (options[:testing] ? WS_CEE_TESTING_URL : WS_CEE_PRODUCTION_URL) }
+      savon_options.merge!({ proxy: @proxy }) if !@proxy.nil? && !@proxy.empty?
+
+      @savon = Savon.client savon_options
     rescue *SAVON_ERRORS => e
       raise WsCee::ConnectionError, e.message
     end
